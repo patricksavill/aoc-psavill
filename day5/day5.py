@@ -1,4 +1,3 @@
-
 import points as Points
 
 all_lines = []
@@ -18,7 +17,7 @@ for line in all_lines:
 print(len(point_index))
 print(max_dim)
 
-array = [[0 for i in range(max_dim+1)] for j in range(max_dim+1)]
+array = [[0 for i in range(max_dim + 1)] for j in range(max_dim + 1)]
 print(len(array))
 
 for i in range(len(point_index)):
@@ -26,14 +25,27 @@ for i in range(len(point_index)):
     # Then iterate over array and add them up
     if point_index[i].isNonDiagonal():
         indexes = point_index[i].getFlatPath()
-        for i in range(int(len(indexes)/2)):
-            array[indexes[i*2]][indexes[i*2+1]] += 1
+        for i in range(int(len(indexes) / 2)):
+            array[indexes[i * 2]][indexes[i * 2 + 1]] += 1
 
 total = 0
 for i in range(len(array[0])):
     for j in range(len(array[i])):
-        if (array[i][j] >1):
-            total+= 1
+        if (array[i][j] > 1):
+            total += 1
 
-print("here we go")
-print(total)
+print("here we go for horizontal/vertical lines: " + str(total))
+
+# Now do it for diagonals
+for i in range(len(point_index)):
+    if not point_index[i].isNonDiagonal():
+        indexes = point_index[i].getDiagonalPath()
+        for i in range(int(len(indexes) / 2)):
+            array[indexes[i * 2]][indexes[i * 2 + 1]] += 1
+
+total = 0
+for i in range(len(array[0])):
+    for j in range(len(array[i])):
+        if (array[i][j] > 1):
+            total += 1
+print("here we go for diagonal lines: " + str(total))
