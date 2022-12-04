@@ -48,3 +48,39 @@ for line in all_lines:
     priority_sum += letter_value(duplicate_item(line[0:int(len(line) / 2)], line[int(len(line) / 2):]))
 
 print("Part one priority sum: %d" % priority_sum)
+
+"""
+Part two
+We're now finding the item that appears across three rucksacks (six compartments)
+"""
+
+
+def three_rucksack_duplicate(rucksacks):
+    # Iterative dictionary checking
+    dict_one = {}
+    dict_two = {}
+
+    # Firstly, just create the dictionary
+    for item in rucksacks[0]:
+        dict_one[item] = 1
+
+    # Now add everything that exists in both rucksacks
+    for item in rucksacks[1]:
+        if item in dict_one:
+            dict_two[item] = 1
+
+    # And finally find the one thing that exists in all three
+    for item in rucksacks[2]:
+        if item in dict_two:
+            return item
+
+
+priority_sum_two = 0
+for i in range(int(len(all_lines) / 3)):
+    ruck_one = all_lines[i * 3].rstrip("\n")
+    ruck_two = all_lines[i * 3 + 1].rstrip("\n")
+    ruck_three = all_lines[i * 3 + 2].rstrip("\n")
+
+    priority_sum_two += letter_value(three_rucksack_duplicate([ruck_one, ruck_two, ruck_three]))
+
+print("Part two priority value: %d" % priority_sum_two)
