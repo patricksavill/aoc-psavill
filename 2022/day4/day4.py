@@ -25,4 +25,26 @@ for line in all_lines:
     elif int(range_one[0]) >= int(range_two[0]) and int(range_one[1]) <= int(range_two[1]):
         contained_pairs += 1
 
-print("Part one container pairs: %d" % contained_pairs)
+print("Part one contained pairs: %d" % contained_pairs)
+
+
+"""
+Part two
+Now we're checking for any overlap, as well as fully enclosed
+"""
+
+contained_pairs = 0
+for line in all_lines:
+    pairs = line.rstrip("\n").split(",")
+    range_one = pairs[0].split("-")
+    range_two = pairs[1].split("-")
+    if int(range_one[0]) <= int(range_two[0]) and int(range_one[1]) >= int(range_two[1]):
+        contained_pairs += 1
+    elif int(range_one[0]) >= int(range_two[0]) and int(range_one[1]) <= int(range_two[1]):
+        contained_pairs += 1
+    elif int(range_one[0]) <= int(range_two[1]) and int(range_one[1]) >= int(range_two[1]):
+        contained_pairs += 1
+    elif int(range_two[0]) <= int(range_one[1]) and int(range_two[1]) >= int(range_one[1]):
+        contained_pairs += 1
+
+print("Part two any overlapping pairs: %d" % contained_pairs)
