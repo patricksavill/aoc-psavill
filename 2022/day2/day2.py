@@ -24,11 +24,11 @@ C = Scissors
 
 def shape_score(shape):
     # Scissors are 3, Paper is 2, and Rock is 1
-    if shape == "Z":
+    if shape == "Z" or shape == "C":
         return 3
-    if shape == "Y":
+    if shape == "Y" or shape == "B":
         return 2
-    if shape == "X":
+    if shape == "X" or shape == "A":
         return 1
 
 
@@ -83,4 +83,48 @@ for line in all_lines:
     inputs = line.rstrip("\n").split(" ")
     total_score += calculate_score(inputs[0], inputs[1])
 
-print("Final score is: %d" % total_score)
+print("Final score of part 1 is: %d" % total_score)
+
+"""
+Part two: 
+According to the strategy guide, it now means:
+X = Loss
+Y = Draw
+Z = Win
+
+And inputs are still
+A = Rock
+B = Paper
+C = Scissors
+"""
+
+
+def ensure_outcome(opp_hand, outcome):
+    if outcome == "X":
+        # we need to lose, so return only the shape score of the losing shape
+        if opp_hand == "A":
+            return shape_score("C")
+        elif opp_hand == "B":
+            return shape_score("A")
+        elif opp_hand == "C":
+            return shape_score("B")
+
+    elif outcome == "Y":
+        # This is the draw, easy case, score is 3 + opponent's shape
+        return 3 + shape_score(opp_hand)
+    else:
+        # We must win
+        if opp_hand == "A":
+            return 6+ shape_score("B")
+        elif opp_hand == "B":
+            return 6+shape_score("C")
+        elif opp_hand == "C":
+            return 6+shape_score("A")
+
+
+total_score_part_two = 0
+for line in all_lines:
+    inputs = line.rstrip("\n").split(" ")
+    total_score_part_two += ensure_outcome(inputs[0], inputs[1])
+
+print("Total score part two %d" % total_score_part_two)
