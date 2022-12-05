@@ -112,3 +112,32 @@ part_one_answer =""
 for q in stacks:
     part_one_answer += q.get()
 print("Part one is: %s" % part_one_answer)
+
+"""
+Part two:
+The same as before BUT crates are moved as a group
+So we're not flipping the orders, but moving in chunks
+
+That's fine, just use an intermediary LIFO queue
+"""
+
+# Reconstruct the stacks
+stacks = construct_stacks(stack_input)
+moves = construct_moves(movement_cmds)
+
+# Apply movements
+temp_queue = queue.LifoQueue()
+for action in moves:
+    shifts_done = 0
+    while shifts_done < action[0]:
+        temp_queue.put(stacks[action[1]].get())
+        shifts_done += 1
+
+    while shifts_done > 0:
+        stacks[action[2]].put(temp_queue.get())
+        shifts_done -= 1
+
+part_two_answer =""
+for q in stacks:
+    part_two_answer += q.get()
+print("Part two is: %s" % part_two_answer)
