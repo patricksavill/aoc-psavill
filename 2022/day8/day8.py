@@ -65,7 +65,82 @@ for row_index in range(len(tree_grid)):
 for colum_index in range(len(tree_grid[0])):
     check_vertical(colum_index)
 
-for x in range(len(visible_grid)):
-    print(visible_grid[x])
+# Nice debug visual on small inputs
+# for x in range(len(visible_grid)):
+#    print(visible_grid[x])
 
 print(sum(sum(visible_grid, [])))
+
+"""
+Part two:
+Find the "scene score" of any given tree
+Find product of summed viewable trees out from a given tree in the grid
+
+Note this is a distance of trees, not sum of viewed trees
+so reading right on 53353 from 5 gives a distance of 3, not 1
+
+We stop when we reach a tree of the same height, or taller, as the initial tree
+"""
+
+
+def sum_left(x, y, max_height):
+    # Requirement for tallest is it must be at least 1 unit higher than the last
+    total = 0
+    while x >= 0:
+        total += 1
+        if tree_grid[x][y] >= max_height:
+            return total
+        x -= 1
+
+    return total
+
+
+def sum_right(x, y, max_height):
+    total = 0
+    while x < len(tree_grid):
+        total += 1
+        if tree_grid[x][y] >= max_height:
+            return total
+        x += 1
+
+    return total
+
+
+def sum_down(x, y, max_height):
+    total = 0
+    while y < len(tree_grid):
+        total += 1
+        if tree_grid[x][y] >= max_height:
+            return total
+        y += 1
+
+    return total
+
+
+def sum_up(x, y, max_height):
+    total = 0
+    while y >= 0:
+        total += 1
+        if tree_grid[x][y] >= max_height:
+            return total
+        y -= 1
+
+    return total
+
+
+def scenic_score(row, column, max_height):
+    left = sum_left(row - 1, column, max_height)
+    right = sum_right(row + 1, column, max_height)
+    down = sum_down(row, column + 1, max_height)
+    up = sum_up(row, column - 1, max_height)
+
+    return left * right * down * up
+
+
+max_score = 0
+for row in range(len(tree_grid)):
+    for column in range(len(tree_grid[row])):
+        score = scenic_score(row, column, tree_grid[row][column])
+        max_score = score if score > max_score else max_score
+
+print(max_score)
