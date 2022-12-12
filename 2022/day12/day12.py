@@ -23,6 +23,9 @@ for line in all_lines:
     for c in line:
         grid[-1].append(c)
 
+MAX_Y = len(grid)
+MAX_X = len(grid[0])
+
 # Note we iterate y first, then x, for visualisation purposes
 # If we did x then y it'd look to us like it's been rotated by 90 degrees
 start_pos = [0, 0]
@@ -35,6 +38,44 @@ for y in range(len(grid)):
             # We modify the value of the char here as ord(E) breaks our checks of 1 unit height
             grid[y][x] = chr(ord("z") + 1)
             end_pos = [x, y]
+
+
+# BFS approach
+class Grid:
+    def __init__(self, pos_x, pos_y, visits):
+        # Running total of visits up to this node
+        self.x = pos_x
+        self.y = pos_y
+        self.visited = visits
+
+
+Q = queue.Queue()
+Q.put(Grid(0, 0, 0))
+N = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+visited_set = set()
+
+while not Q.empty():
+    curr = Q.get()
+    if (curr.x, curr.y) in visited_set:
+        continue
+    visited_set.add((curr.x, curr.y))
+    for dx, dy in N:
+        new_x = curr.x + dx
+        new_y = curr.y + dy
+        if 0 <= new_x < MAX_X and 0 <= new_y < MAX_Y:
+            if ord(grid[new_y][new_x]) - ord(grid[curr.y][curr.x]) > 1:
+                continue
+
+            # Test for success
+            if curr.x == end_pos[0] and curr.y == end_pos[1]:
+                print("Finished in %d" % curr.visited)
+                break
+
+            new_grid = Grid(new_x, new_y, curr.visited + 1)
+
+            Q.put(new_grid)
+
+exit(0)
 
 
 class GridNode:
@@ -99,7 +140,7 @@ while len(to_process) > 0:
             neigh_node.start_dist = abs(xc - start_node.x) + abs(yc - start_node.y)
             neigh_node.goal_dist = abs(xc - end_node.x) + abs(yc - end_node.y)
             neigh_node.visited = curr.visited + 1
-            neigh_node.cost = neigh_node.start_dist + neigh_node.goal_dist - neigh_node.visited 
+            neigh_node.cost = neigh_node.goal_dist
 
             # Now check if we want to add the node to be processed
             if len(to_process) == 0:
