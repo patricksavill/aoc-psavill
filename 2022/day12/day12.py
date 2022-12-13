@@ -78,3 +78,37 @@ while not Q.empty():
 
             Q.put(new_grid)
 
+"""
+Part two:
+We can now start from any a, as well as the initial S position
+Same BFS approach as before, but with multiple starting points 
+
+To make it simpler lets start at the end and work backwards
+"""
+
+Q = queue.Queue()
+visited_set = set()
+Q.put(Grid(end_pos[0], end_pos[1], 0))
+
+while not Q.empty():
+    curr = Q.get()
+
+    # Test for success
+    if grid[curr.y][curr.x] == "a":
+        print("Finished part two in %d" % curr.visited)
+        break
+
+    for dx, dy in N:
+        new_x = curr.x + dx
+        new_y = curr.y + dy
+        if 0 <= new_x < MAX_X and 0 <= new_y < MAX_Y:
+            # Climbing backwards we can only step down one at most one at a time
+
+            if ord(grid[curr.y][curr.x]) - ord(grid[new_y][new_x]) <= 1:
+                if (new_x, new_y) in visited_set:
+                    continue
+
+                new_grid = Grid(new_x, new_y, curr.visited + 1)
+                visited_set.add((new_x, new_y))
+
+                Q.put(new_grid)
