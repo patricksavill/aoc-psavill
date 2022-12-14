@@ -61,5 +61,39 @@ for c in cave_rocks:
         else:
             print("unknown")
 
-for c in cave_grid:
-    print(c)
+# Debug printing statement
+# for c in cave_grid:
+#     print(c)
+#
+
+def drop_sand(x, y):
+    # Recursive function to keep dropping sand down
+    # If x or y is out of bounds, we hit the abyss
+
+    try:
+        if cave_grid[y+1][x] == 0:
+            return drop_sand(x, y+1)
+        elif cave_grid[y+1][x-1] == 0:
+            return drop_sand(x-1, y+1)
+        elif cave_grid[y+1][x+1] == 0:
+            return drop_sand(x+1, y+1)
+        else:
+            # Set the sand here
+            cave_grid[y][x] = 1
+
+        return False
+    except IndexError:
+        print("Hit the abyss!")
+        return True
+
+
+# Start ddropping sand in
+sand_orig = (0, origin)
+count = 0
+while True:
+    if not drop_sand(sand_orig[1], sand_orig[0]):
+        count += 1
+    else:
+        break
+
+print("Part one hit abyss in %d" % count)
