@@ -10,3 +10,7 @@ def file_reader(file_path):
         all_lines = reader.readlines()
 
     return all_lines
+
+def strip_newlines(line_list):
+    return [x.rstrip("\n") for x in line_list]
+
