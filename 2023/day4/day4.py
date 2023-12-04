@@ -40,15 +40,14 @@ for i in range(len(all_lines)):
         # Initialise as 1 card
         card_dict[i] = 1
 
-    for count in range(0,card_dict[i]):
-        num_matches = card_won(all_lines[i], num_matches=True)
-        for n in range(i+1, i+num_matches+1):
-            if n not in card_dict.keys():
-                card_dict[n] = 2 # We know there's one original, and then add this copy
-            else:
-                card_dict[n] = card_dict[n] + 1
+    number_of_this_card = card_dict[i]
+    num_matches = card_won(all_lines[i], num_matches=True)
+    for n in range(i+1, i+num_matches+1):
+        if n not in card_dict.keys():
+            card_dict[n] = 1+number_of_this_card # We know there's one original, and then add this copy
+        else:
+            card_dict[n] = card_dict[n] + number_of_this_card
 
-print(card_dict)
 total_cards = 0
 for k in card_dict:
     total_cards += card_dict[k]
