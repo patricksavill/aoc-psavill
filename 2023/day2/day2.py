@@ -36,6 +36,20 @@ def game_valid(line:str, r_num:int, g_num:int, b_num:int):
 
     return int(game_number), True
 
+def game_min(line:str):
+    game_number = re.search(r'(?<=Game )[0-9]+', line).group()
+
+    games = line.split(":")[-1].split(";")
+    max_r = 0
+    max_g = 0
+    max_b = 0
+    for g in games:
+        r,g,b = parse_cubes_per_game(g)
+        max_r = max(max_r, r)
+        max_g = max(max_g, g)
+        max_b = max(max_b, b)
+
+    return int(game_number), max_r, max_g, max_b
 
 sum = 0
 for l in all_lines:
@@ -46,3 +60,10 @@ for l in all_lines:
         print(l)
 
 print(sum)
+
+power_sum = 0
+for l in all_lines:
+    g_num, r, g, b = game_min(l)
+    power_sum += r * g * b
+
+print(power_sum)
