@@ -45,3 +45,8 @@ for i in range(len(times)):
     ways *= calculate_ways(times[i], distances[i])
 
 print(ways)
+
+merged_time = int("".join([str(t) for t in times]))
+merged_distance = int("".join([str(d) for d in distances]))
+
+print(calculate_ways(merged_time, merged_distance))
