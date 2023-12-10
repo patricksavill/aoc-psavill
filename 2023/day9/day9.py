@@ -13,7 +13,7 @@ def all_values_zero(values):
         if v != 0:
             return False
     return True
-def predict_value(values):
+def predict_value(values, backwards=False):
     zero_found = False
     list_values = []
     list_values.append(values)
@@ -26,10 +26,17 @@ def predict_value(values):
         if sum(running_list) == 0:
             zero_found = all_values_zero(running_list)
 
+    if backwards:
+        for i in range(len(list_values)):
+            list_values[i].reverse()
+
     print(list_values)
     for j in range(len(list_values)-1, 0, -1):
         if j > 0:
-            new_value = list_values[j-1][-1] + list_values[j][-1]
+            if backwards:
+                new_value = list_values[j-1][-1] -list_values[j][-1]
+            else:
+                new_value = list_values[j - 1][-1] + list_values[j][-1]
             list_values[j-1].append(new_value)
 
     print(list_values)
@@ -41,4 +48,13 @@ for l in all_lines:
     p = predict_value(v)
     history_sum += p
 
-print(history_sum)
+print('2023 day 9 pt 1: %d' % history_sum)
+
+
+history_sum = 0
+for l in all_lines:
+    v = [int(x) for x in l.split(" ") if x != '']
+    p = predict_value(v, backwards=True)
+    history_sum += p
+
+print('2023 day 9 pt 2: %d' % history_sum)
