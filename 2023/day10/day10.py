@@ -105,8 +105,8 @@ def return_next_coord(c_arr, y, x, a, b):
             return c_arr[a + s[0]][b + s[1]], a + s[0], b + s[1]
 
 
-def testing_traversal():
-    with open('day10-test.txt') as handle:
+def testing_traversal(input_file):
+    with open(input_file) as handle:
         test_lines = handle.readlines()
 
     char_arr = []
@@ -126,6 +126,7 @@ def testing_traversal():
     working_pipes.remove(working_pipes[0])
     start_y = start_loc[0]
     start_x = start_loc[1]
+    steps = 1
     while True:
         w = working_pipes[0]
         working_pipes.remove(w)
@@ -134,7 +135,16 @@ def testing_traversal():
         start_y = w[0]
         start_x = w[1]
         if s == 'S':
+            steps+=1
+            print(steps)
+            print(steps/2)
+            return steps/2
             return
         working_pipes.append([y1, x1])
+        steps += 1
 
-testing_traversal()
+
+testing_traversal('day10-test.txt')
+
+half_steps = testing_traversal('day10-input.txt')
+print('2023 half loop length part 1:', half_steps)
