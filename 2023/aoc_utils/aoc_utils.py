@@ -14,3 +14,16 @@ def file_reader(file_path):
 def strip_newlines(line_list):
     return [x.rstrip("\n") for x in line_list]
 
+def print_arr(a):
+    s = ""
+    for x in range(a.shape[0]):
+        for y in range(a.shape[1]):
+            if a[x][y] == 2:
+                s += "O"
+            elif a[x][y] == 1:
+                s += "#"
+            else:
+                s+="."
+        s += "\n"
+    print(s)
+
