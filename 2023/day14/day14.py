@@ -82,3 +82,28 @@ aoc_utils.print_arr(stacked_arr)
 for x in range(height):
     sum_rounded += (height - x) * np.sum(stacked_arr[x,:] == 2)
     print(sum_rounded)
+
+
+# Now part 2
+stacked_arr = np.zeros((height, width))
+for x in range(height):
+    for y in range(width):
+        if char_arr[x][y] == "#":
+            stacked_arr[x][y] = 1
+
+cycles = 1e6
+src_arr = n_arr
+aoc_utils.print_arr(src_arr)
+for c in range(cycles):
+    for i in range(4):
+        stack_rocks(src_arr, stacked_arr, debug=False)
+        aoc_utils.print_arr(stacked_arr)
+        src_arr = np.rot90(stacked_arr.copy(),3)
+        stacked_arr = np.rot90(stacked_arr,3)
+        if i != 3:
+            stacked_arr[np.where(stacked_arr == 2)] = 0
+    if c != cycles-1:
+        stacked_arr[np.where(stacked_arr == 2)] = 0
+aoc_utils.print_arr(stacked_arr)
+
+
