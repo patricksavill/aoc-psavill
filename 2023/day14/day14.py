@@ -81,7 +81,8 @@ sum_rounded = 0
 aoc_utils.print_arr(stacked_arr)
 for x in range(height):
     sum_rounded += (height - x) * np.sum(stacked_arr[x,:] == 2)
-    print(sum_rounded)
+
+print("2023 day 14 pt 1: %d" % sum_rounded)
 
 
 # Now part 2
@@ -91,19 +92,48 @@ for x in range(height):
         if char_arr[x][y] == "#":
             stacked_arr[x][y] = 1
 
-cycles = 1e6
+
+# Every 100 cycles we write into a list
+# We check that list for matches of the current cycle
+# If it matches, we know the repeated cycle range we can skip forward, and get the same result
+# We thus skip forward as far as we can, then keep iterating until we reach the target cycles
+
+cycles = 1000000000
 src_arr = n_arr
 aoc_utils.print_arr(src_arr)
-for c in range(cycles):
+cache_iter = []
+cycle_cache_repetition = 10
+c = 0
+while c < cycles:
     for i in range(4):
         stack_rocks(src_arr, stacked_arr, debug=False)
-        aoc_utils.print_arr(stacked_arr)
         src_arr = np.rot90(stacked_arr.copy(),3)
         stacked_arr = np.rot90(stacked_arr,3)
         if i != 3:
             stacked_arr[np.where(stacked_arr == 2)] = 0
+    if c % cycle_cache_repetition == 0:
+
+        if len(cache_iter) > 0:
+            # Search for a match
+            for ci in range(len(cache_iter)):
+                if np.all(cache_iter[ci] == src_arr):
+                    print("Cache num: %d\tCycle num: %d" % (ci, c))
+                    repeated_range = (c-ci*cycle_cache_repetition)
+                    skippable = (cycles - c) // repeated_range
+                    c += skippable*repeated_range
+
+        cache_iter.append(src_arr)
+        print(c)
     if c != cycles-1:
+        # Reset the stacked array for writing into, prevents duplicated rocks (in current implementation)
         stacked_arr[np.where(stacked_arr == 2)] = 0
+
+    c += 1
+
+
+sum_rounded = 0
 aoc_utils.print_arr(stacked_arr)
+for x in range(height):
+    sum_rounded += (height - x) * np.sum(stacked_arr[x,:] == 2)
 
-
+print("2023 day 14 pt 2: %d" % sum_rounded)
