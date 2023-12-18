@@ -87,3 +87,46 @@ def flood_fill(src_grid):
 
 filled = flood_fill(dirt)
 print("2023 day 18 pt 1: %d" % np.sum(filled!=2))
+
+# Part 2, far far bigger
+# Recommended ways to find area of a polygon are shoelace and pick's theorems
+# Shoelace: Sum up areas of a polygon in order 0.5 * (x1*y2 - x2*y1)
+# Pick's theorem: (number of interior points) + (number of perimeter points)/2 - 1
+
+coords = []
+x = 0
+y = 0
+edge_lengths = []
+for l in all_lines:
+    coords.append([x, y])
+    _, _, col = l.split(" ")
+
+    digs = int(col.split("#")[-1][0:5], 16)
+    hex_dir = int(col.split("#")[-1][5])
+    if hex_dir == 0:
+        d = "R"
+        x = x + digs
+    elif hex_dir == 1:
+        d = "D"
+        y = y + digs
+    elif hex_dir == 2:
+        d = "L"
+        x = x - digs
+    elif hex_dir == 3:
+        d = "U"
+        y = y - digs
+
+    edge_lengths.append(digs)
+
+
+# Shoelace theorem to calculate area of polygon
+area = 0
+for i in range(len(coords)-1):
+    area += 0.5 * ((coords[i][0] * coords[i+1][1]) - (coords[i+1][0] * coords[i][1]))
+
+# Perimeter is simply the sum of all edge lengths
+perimeter = np.sum(np.array(edge_lengths))
+picks_area = int(area - perimeter / 2 + 1)
+dug_out_blocks = perimeter + picks_area
+
+print("2023 day 18 pt 2: %d" % dug_out_blocks)
